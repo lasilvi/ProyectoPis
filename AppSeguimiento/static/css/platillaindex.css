@@ -1,0 +1,29 @@
+ /* Estilos personalizados para el sidebar y contenido */
+ #sidebar {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #333;
+    padding-top: 20px;
+}
+
+#content {
+    margin-left: 260px;
+    padding: 20px;
+}
+
+/* Estilos personalizados para los enlaces del sidebar */
+#sidebar a {
+    padding: 10px 15px;
+    text-align: left;
+    text-decoration: none;
+    font-size: 18px;
+    color: white;
+    display: block;
+}
+
+#sidebar a:hover {
+    background-color: #555;
+}

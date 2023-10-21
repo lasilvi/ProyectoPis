@@ -1,0 +1,26 @@
+from django.db import models
+
+class Equipos(models.Model):
+    servicio = models.CharField(max_length=200, null=True)
+    equipo = models.CharField(max_length=200, null=True)
+    ubicacion = models.CharField(max_length=200, null=True)
+    sede = models.CharField(max_length=200, null=True)
+    etiqueta_caja = models.CharField(max_length=200, null=True)
+    factura_contrato = models.CharField(max_length=200, null=True)
+    resolucion_invima = models.CharField(max_length=200, null=True)
+    carta_garantia = models.CharField(max_length=200, null=True)
+    acta_entrega = models.CharField(max_length=200, null=True)
+    declaracion_importacion = models.CharField(max_length=200, null=True)
+    cronograma_mantenimiento = models.CharField(max_length=200, null=True)
+    cronograma_calibracion = models.CharField(max_length=200, null=True)
+    reportes_mantenimiento = models.CharField(max_length=200, null=True)
+    reportes_calibracion = models.CharField(max_length=200, null=True)
+    guia_rapida = models.CharField(max_length=200, null=True)
+    manual_usuario_espanol = models.CharField(max_length=200, null=True)
+    manual_servicio_espanol = models.CharField(max_length=200, null=True)
+    hoja_vida_calibracion = models.CharField(max_length=200, null=True)
+    hoja_vida_mantenimiento = models.CharField(max_length=200, null=True)
+    contrato_mantenimiento = models.CharField(max_length=200, null=True)
+    contrato_calibracion = models.CharField(max_length=200, null=True)
+    def __str__(self):
+        return str(self.pk)

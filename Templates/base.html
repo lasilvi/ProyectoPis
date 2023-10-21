@@ -1,0 +1,64 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Agrega el enlace a la hoja de estilos de Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Agrega tus propios estilos CSS aquí -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link type="text/css" href="{% static 'css/platillaindex.css' %}" rel="stylesheet">
+   
+</head>
+<body>
+    <header class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="{% static 'images/1-logo-ico.png' %}" alt="Logo del hospital" width="30" height="30">
+                Hospital Alma Máter de Antioquia
+            </a>
+        </div>
+    </header>
+    <!-- Sidebar -->
+    <div class="container-fluid" >
+    <div id="sidebar">
+        
+        <hr>
+        <a href="{% url 'importar_datos' %}"><i class="bi bi-clipboard2-pulse"></i> Consulta Externa</a>
+        <a href="#"><i class="bi bi-heart"></i> UCI</a>
+        <a href="#"><i class="bi bi-exclamation-triangle"></i> Urgencias</a>
+        <a href="#"><i class="bi bi-clipboard-heart-fill"></i></i> Hospitalización</a>
+        <a href="#"><i class="bi bi-capsule"></i> Servicios Farmacéuticos</a>
+        <a href="{% url 'importar_datos' %}"><i class="bi bi-capsule"></i> Actualizar datos</a>
+        <hr>
+        <p class="text-center">Usuario: Nombre de Usuario</p>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="bi bi-person"></i> Perfil
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="bi bi-gear"></i> Configuración
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'logout' %}">
+                        <i class="bi bi-house-door"></i> Cerrar sesión
+                    </a>
+                </li>
+                <!-- Agrega más elementos de menú con iconos aquí -->
+            </ul>
+    </div>    
+    {% block contenido %}
+    {% endblock %}
+</body>
+</html>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
