@@ -16,3 +16,8 @@ class UserLoginForm(AuthenticationForm):
     
 class ImportarDatosForm(forms.Form):
     archivo_excel = forms.FileField(label='Seleccionar archivo Excel')
+    
+class BusquedaEquiposForm(forms.Form):
+    ubicacion = forms.CharField(required=False)
+    equipo = forms.CharField(required=False)
+    sede = forms.CharField(required=False)

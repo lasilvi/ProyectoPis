@@ -28,11 +28,11 @@
     <div id="sidebar">
         
         <hr>
-        <a href="{% url 'importar_datos' %}"><i class="bi bi-clipboard2-pulse"></i> Consulta Externa</a>
-        <a href="#"><i class="bi bi-heart"></i> UCI</a>
+        <a href="#"><i class="bi bi-clipboard2-pulse"></i> Consulta Externa</a>
+        <a href="{% url 'uce' %}"><i class="bi bi-heart"></i> UCE </a>
         <a href="#"><i class="bi bi-exclamation-triangle"></i> Urgencias</a>
-        <a href="#"><i class="bi bi-clipboard-heart-fill"></i></i> Hospitalización</a>
-        <a href="#"><i class="bi bi-capsule"></i> Servicios Farmacéuticos</a>
+        
+      
         <a href="{% url 'importar_datos' %}"><i class="bi bi-capsule"></i> Actualizar datos</a>
         <hr>
         <p class="text-center">Usuario: Nombre de Usuario</p>
@@ -55,6 +55,7 @@
                 <!-- Agrega más elementos de menú con iconos aquí -->
             </ul>
     </div>    
+    
     {% block contenido %}
     {% endblock %}
 </body>

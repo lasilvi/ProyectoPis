@@ -18,8 +18,9 @@
 </head>
 
 <body>
+  {% block contenido %}
     <div id="content" >
-        <h2>SERVICIO DE CONSULTA EXTERNA GENERAL</h2>
+        <h2>SERVICIO DE UNIDAD DE CUIDADOS ESPECIALIZADOS</h2>
         <div class="row">
             <div class="col-lg-8 mb-4 order-0">
               <div class="card">
@@ -80,25 +81,60 @@
             </div>
             
             <div class="col-12 mb-4">
-                <div class="card">
-                  <div class="card-body">
-                    <div class="d-flex justify-content-between flex-sm-row flex-column gap-3" style="position: relative;">
-                      <div class="d-flex flex-sm-column flex-row align-items-start justify-content-between">
-                        <div class="card-title">
-                          <h5 class="text-nowrap mb-2">Reporte</h5>
-                          <span class="badge bg-label-warning rounded-pill">Año 2023</span>
-                        </div>
-                        <div class="mt-sm-auto">
-                          <small class="text-success text-nowrap fw-medium"><i class="bx bx-chevron-up"></i> 68.2%</small>
-                          <h3 class="mb-0">$84,686k</h3>
-                        </div>
-                      </div>
-                      <div id="profileReportChart" style="min-height: 80px;"><div id="apexchartsfkj2ozyx" class="apexcharts-canvas apexchartsfkj2ozyx apexcharts-theme-light" style="width: 148px; height: 80px;">
-                        <svg id="SvgjsSvg2345" width="148" height="80" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev" class="apexcharts-svg" xmlns:data="ApexChartsNS" transform="translate(0, 0)" style="background: transparent;">
-                        </div></div>
-                    <div class="resize-triggers"><div class="expand-trigger"><div style="width: 284px; height: 117px;"></div></div><div class="contract-trigger"></div></div></div>
-                  </div>
+              <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-center align-items-center flex-sm-column flex-row gap-3">
+                        <form method="post" class="form-inline">
+                            {% csrf_token %}
+                            <div class="form-group mr-3">
+                                <label for="ubicacion">Ubicación:</label>
+                                <input type="text" class="form-control" id="ubicacion" name="ubicacion" placeholder="Ubicación">
+                            </div>
+                            <div class="form-group mr-3">
+                                <label for="equipo">Equipo:</label>
+                                <input type="text" class="form-control" id="equipo" name="equipo" placeholder="Equipo">
+                            </div>
+                            <div class="form-group mr-3">
+                                <label for="sede">Sede:</label>
+                                <input type="text" class="form-control" id="sede" name="sede" placeholder="Sede">
+                            </div>
+                            <button type="submit" class="btn btn-primary" name="action" value="filtrar">Filtrar</button>
+                        </form>
+                    
+                        <!-- Tabla para mostrar los equipos filtrados -->
+                        
+                        <table class="table table-bordered table-striped  mt-3">
+                            <thead>
+                                <tr>
+                                    
+                                    <th>Servicio</th>
+                                    <th>Ubicación</th>
+                                    <th>Equipo</th>
+                                    <th>Sede</th>
+                                    <!-- Otros encabezados de columnas -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for equipo in equipos_filtrados %}
+                                    <tr>
+                                
+                                        <td>{{ equipo.servicio }}</td>
+                                        <td>{{ equipo.ubicacion }}</td>
+                                        <td>{{ equipo.equipo }}</td>
+                                        <td>{{ equipo.sede }}</td>
+                                        <!-- Otros campos de equipo -->
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="5">No se encontraron equipos que coincidan con la búsqueda.</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
+            </div>
+            
               </div>
              
             <div class="row">
@@ -405,5 +441,6 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+{% endblock %}
 </body>
 </html>
