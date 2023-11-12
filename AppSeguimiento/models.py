@@ -2,7 +2,8 @@ from django.db import models
 
 class Equipos(models.Model):
     servicio = models.CharField(max_length=200, null=True)
-    equipo = models.CharField(max_length=200, null=True)
+    bio = models.CharField(max_length=200, null=True)
+    nombre = models.CharField(max_length=200, null=True)
     ubicacion = models.CharField(max_length=200, null=True)
     sede = models.CharField(max_length=200, null=True)
     etiqueta_caja = models.CharField(max_length=200, null=True)
@@ -22,5 +23,6 @@ class Equipos(models.Model):
     hoja_vida_mantenimiento = models.CharField(max_length=200, null=True)
     contrato_mantenimiento = models.CharField(max_length=200, null=True)
     contrato_calibracion = models.CharField(max_length=200, null=True)
+    porcentajedecumplimiento = models.CharField(max_length=200, null=True)
     def __str__(self):
         return str(self.pk)

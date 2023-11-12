@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static%}
+{% block contenido %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,429 +19,313 @@
 </head>
 
 <body>
-  {% block contenido %}
+
     <div id="content" >
-        <h2>SERVICIO DE UNIDAD DE CUIDADOS ESPECIALIZADOS</h2>
+      <div class="table-responsive">
+
+        <h2>SERVICIO DE CONSULTA EXTERNA</h2>
         <div class="row">
             <div class="col-lg-8 mb-4 order-0">
-              <div class="card">
-                <div class="d-flex align-items-end row">
-                  <div class="col-sm-7">
-                    <div class="card-body">
-                      <h5 class="card-title text-primary">Estándar de dotación<br> Modalidad intramural
-                        </h5>
-                      <p class="mb-4">
-                        Camilla fija<br>
-                        Escalerilla<br>
-                        Tensiómetro<br>
-                        Fonendoscopio<br>
-                        Equipo de órganos de los sentidos<br>
-                        Martillo de reflejos<br>
-                        Tallímetro<br>
-                        Cinta métrica<br>
-                        Báscula grado médico<br>
-                        Termómetro<br>
-                        Negatoscopio
-                        
-                        </p>
-          
-                      <a href="javascript:;" class="btn btn-sm btn-outline-primary">Mas información</a>
+              <div class="card my-0">
+                <div class="row">      
+                  <div class="card-body">
+                    <h5 class="card-title text-primary">Estándar de dotación</h5>
+                    <div class="table-responsive w-80">
+                        <table class="table w-80">
+                            <thead>
+                                <tr>
+                                    <th style="width: 60%;">Nombre del Equipo</th>
+                                    <th style="width: 40%;">Número de unidades</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for nombre, count in conteo_equipos.items %}
+                                    <tr>
+                                        <td style="width: 60%;">{{ nombre }}</td>
+                                        <td style="width: 40%;">{{ count }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
-                  </div>
+                </div>          
                 </div>
               </div>
             </div>
+
             <div class="col-lg-4 col-md-4 order-1">
                 <div class="col-lg-12 col-md-12 col-6 mb-4">
                   <div class="card mb-5">
                     <div class="card-body">
                       <div class="card-title d-flex align-items-start justify-content-between">
                         <div class="avatar flex-shrink-0">
-                          <img src="../assets/img/icons/unicons/wallet-info.png" class="rounded">
                         </div>
                       </div>
-                      <span>Total de servicios habilitados</span>
-                      <h3 class="card-title text-nowrap mb-1">4</h3>
-                      <small class="text-success fw-medium"><i class="bx bx-up-arrow-alt"></i> +28.42%</small>
+                      <span>Total de consultorios habilitados</span>
+                      <h3 class="card-title text-nowrap mb-1"> {{ total_consultorios }} </h3>
+                      <small class="text-success fw-medium"><i class="bx bx-up-arrow-alt"></i> %</small>
                     </div>
                   </div>
                   <div class="card mb-5">
                     <div class="card-body">
                       <div class="card-title d-flex align-items-start justify-content-between">
                         <div class="avatar flex-shrink-0">
-                          <img src="../assets/img/icons/unicons/wallet-info.png" class="rounded">
                         </div>
                       </div>
-                      <span>Total de servicios disponibles</span>
-                      <h3 class="card-title text-nowrap mb-1">10</h3>
-                      <small class="text-success fw-medium"><i class="bx bx-up-arrow-alt"></i> +48.42%</small>
+                      <span>Total de consultorios disponibles</span>
+                      <h3 class="card-title text-nowrap mb-1"> {{ total_consultorios}} </h3>
+                      <small class="text-success fw-medium"><i class="bx bx-up-arrow-alt"></i>  {{total_consultorios}}</small>
                     </div>
                   </div>
-                </div>
-              </div>
-            </div>
-            
-            <div class="col-12 mb-4">
-              <div class="card">
-                <div class="card-body">
-                    <div class="d-flex justify-content-center align-items-center flex-sm-column flex-row gap-3">
-                        <form method="post" class="form-inline">
-                            {% csrf_token %}
-                            <div class="form-group mr-3">
-                                <label for="ubicacion">Ubicación:</label>
-                                <input type="text" class="form-control" id="ubicacion" name="ubicacion" placeholder="Ubicación">
-                            </div>
-                            <div class="form-group mr-3">
-                                <label for="equipo">Equipo:</label>
-                                <input type="text" class="form-control" id="equipo" name="equipo" placeholder="Equipo">
-                            </div>
-                            <div class="form-group mr-3">
-                                <label for="sede">Sede:</label>
-                                <input type="text" class="form-control" id="sede" name="sede" placeholder="Sede">
-                            </div>
-                            <button type="submit" class="btn btn-primary" name="action" value="filtrar">Filtrar</button>
-                        </form>
-                    
-                        <!-- Tabla para mostrar los equipos filtrados -->
-                        
-                        <table class="table table-bordered table-striped  mt-3">
-                            <thead>
-                                <tr>
-                                    
-                                    <th>Servicio</th>
-                                    <th>Ubicación</th>
-                                    <th>Equipo</th>
-                                    <th>Sede</th>
-                                    <!-- Otros encabezados de columnas -->
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for equipo in equipos_filtrados %}
-                                    <tr>
-                                
-                                        <td>{{ equipo.servicio }}</td>
-                                        <td>{{ equipo.ubicacion }}</td>
-                                        <td>{{ equipo.equipo }}</td>
-                                        <td>{{ equipo.sede }}</td>
-                                        <!-- Otros campos de equipo -->
-                                    </tr>
-                                {% empty %}
-                                    <tr>
-                                        <td colspan="5">No se encontraron equipos que coincidan con la búsqueda.</td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
                 </div>
             </div>
-            
-              </div>
-             
-            <div class="row">
-                <!-- Order Statistics -->
-                <div class="col-md-6 col-lg-4 col-xl-4 order-0 mb-4">
-                  <div class="card h-100">
-                    <div class="card-header d-flex align-items-center justify-content-between pb-0">
-                      <div class="card-title mb-0">
-                        <h5 class="m-0 me-2">Order Statistics</h5>
-                        <small class="text-muted">42.82k Total Sales</small>
-                      </div>
-                      <div class="dropdown">
-                        <button class="btn p-0" type="button" id="orederStatistics" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <i class="bx bx-dots-vertical-rounded"></i>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="orederStatistics">
-                          <a class="dropdown-item" href="javascript:void(0);">Select All</a>
-                          <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
-                          <a class="dropdown-item" href="javascript:void(0);">Share</a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="card-body">
-                      <div class="d-flex justify-content-between align-items-center mb-3" style="position: relative;">
-                        <div class="d-flex flex-column align-items-center gap-1">
-                          <h2 class="mb-2">8,258</h2>
-                          <span>Total Orders</span>
-                        </div>
-                        <div id="orderStatisticsChart" style="min-height: 137.55px;"><div id="apexchartsn1fl0ujdh" class="apexcharts-canvas apexchartsn1fl0ujdh apexcharts-theme-light" style="width: 130px; height: 137.55px;"><svg id="SvgjsSvg2051" width="130" height="137.55" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev" class="apexcharts-svg" xmlns:data="ApexChartsNS" transform="translate(0, 0)" style="background: transparent;"><g id="SvgjsG2053" class="apexcharts-inner apexcharts-graphical" transform="translate(-7, 0)"><defs id="SvgjsDefs2052"><clipPath id="gridRectMaskn1fl0ujdh"><rect id="SvgjsRect2055" width="150" height="173" x="-4.5" y="-2.5" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect></clipPath><clipPath id="forecastMaskn1fl0ujdh"></clipPath><clipPath id="nonForecastMaskn1fl0ujdh"></clipPath><clipPath id="gridRectMarkerMaskn1fl0ujdh"><rect id="SvgjsRect2056" width="145" height="172" x="-2" y="-2" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect></clipPath></defs><g id="SvgjsG2057" class="apexcharts-pie"><g id="SvgjsG2058" transform="translate(0, 0) scale(1)"><circle id="SvgjsCircle2059" r="44.835365853658544" cx="70.5" cy="70.5" fill="transparent"></circle><g id="SvgjsG2060" class="apexcharts-slices"><g id="SvgjsG2061" class="apexcharts-series apexcharts-pie-series" seriesName="Electronic" rel="1" data:realIndex="0"><path id="SvgjsPath2062" d="M 70.5 10.71951219512195 A 59.78048780487805 59.78048780487805 0 0 1 97.63977353321047 123.7648046533095 L 90.85483014990785 110.44860348998213 A 44.835365853658544 44.835365853658544 0 0 0 70.5 25.664634146341456 L 70.5 10.71951219512195 z" fill="rgba(105,108,255,1)" fill-opacity="1" stroke-opacity="1" stroke-linecap="butt" stroke-width="5" stroke-dasharray="0" class="apexcharts-pie-area apexcharts-donut-slice-0" index="0" j="0" data:angle="153" data:startAngle="0" data:strokeWidth="5" data:value="85" data:pathOrig="M 70.5 10.71951219512195 A 59.78048780487805 59.78048780487805 0 0 1 97.63977353321047 123.7648046533095 L 90.85483014990785 110.44860348998213 A 44.835365853658544 44.835365853658544 0 0 0 70.5 25.664634146341456 L 70.5 10.71951219512195 z" stroke="#ffffff"></path></g><g id="SvgjsG2063" class="apexcharts-series apexcharts-pie-series" seriesName="Sports" rel="2" data:realIndex="1"><path id="SvgjsPath2064" d="M 97.63977353321047 123.7648046533095 A 59.78048780487805 59.78048780487805 0 0 1 70.5 130.28048780487805 L 70.5 115.33536585365854 A 44.835365853658544 44.835365853658544 0 0 0 90.85483014990785 110.44860348998213 L 97.63977353321047 123.7648046533095 z" fill="rgba(133,146,163,1)" fill-opacity="1" stroke-opacity="1" stroke-linecap="butt" stroke-width="5" stroke-dasharray="0" class="apexcharts-pie-area apexcharts-donut-slice-1" index="0" j="1" data:angle="27" data:startAngle="153" data:strokeWidth="5" data:value="15" data:pathOrig="M 97.63977353321047 123.7648046533095 A 59.78048780487805 59.78048780487805 0 0 1 70.5 130.28048780487805 L 70.5 115.33536585365854 A 44.835365853658544 44.835365853658544 0 0 0 90.85483014990785 110.44860348998213 L 97.63977353321047 123.7648046533095 z" stroke="#ffffff"></path></g><g id="SvgjsG2065" class="apexcharts-series apexcharts-pie-series" seriesName="Decor" rel="3" data:realIndex="2"><path id="SvgjsPath2066" d="M 70.5 130.28048780487805 A 59.78048780487805 59.78048780487805 0 0 1 10.71951219512195 70.50000000000001 L 25.664634146341456 70.5 A 44.835365853658544 44.835365853658544 0 0 0 70.5 115.33536585365854 L 70.5 130.28048780487805 z" fill="rgba(3,195,236,1)" fill-opacity="1" stroke-opacity="1" stroke-linecap="butt" stroke-width="5" stroke-dasharray="0" class="apexcharts-pie-area apexcharts-donut-slice-2" index="0" j="2" data:angle="90" data:startAngle="180" data:strokeWidth="5" data:value="50" data:pathOrig="M 70.5 130.28048780487805 A 59.78048780487805 59.78048780487805 0 0 1 10.71951219512195 70.50000000000001 L 25.664634146341456 70.5 A 44.835365853658544 44.835365853658544 0 0 0 70.5 115.33536585365854 L 70.5 130.28048780487805 z" stroke="#ffffff"></path></g><g id="SvgjsG2067" class="apexcharts-series apexcharts-pie-series" seriesName="Fashion" rel="4" data:realIndex="3"><path id="SvgjsPath2068" d="M 10.71951219512195 70.50000000000001 A 59.78048780487805 59.78048780487805 0 0 1 70.48956633664653 10.719513105630845 L 70.4921747524849 25.664634829223125 A 44.835365853658544 44.835365853658544 0 0 0 25.664634146341456 70.5 L 10.71951219512195 70.50000000000001 z" fill="rgba(113,221,55,1)" fill-opacity="1" stroke-opacity="1" stroke-linecap="butt" stroke-width="5" stroke-dasharray="0" class="apexcharts-pie-area apexcharts-donut-slice-3" index="0" j="3" data:angle="90" data:startAngle="270" data:strokeWidth="5" data:value="50" data:pathOrig="M 10.71951219512195 70.50000000000001 A 59.78048780487805 59.78048780487805 0 0 1 70.48956633664653 10.719513105630845 L 70.4921747524849 25.664634829223125 A 44.835365853658544 44.835365853658544 0 0 0 25.664634146341456 70.5 L 10.71951219512195 70.50000000000001 z" stroke="#ffffff"></path></g></g></g><g id="SvgjsG2069" class="apexcharts-datalabels-group" transform="translate(0, 0) scale(1)"><text id="SvgjsText2070" font-family="Helvetica, Arial, sans-serif" x="70.5" y="90.5" text-anchor="middle" dominant-baseline="auto" font-size="0.8125rem" font-weight="400" fill="#373d3f" class="apexcharts-text apexcharts-datalabel-label" style="font-family: Helvetica, Arial, sans-serif;">Weekly</text><text id="SvgjsText2071" font-family="Public Sans" x="70.5" y="71.5" text-anchor="middle" dominant-baseline="auto" font-size="1.5rem" font-weight="400" fill="#566a7f" class="apexcharts-text apexcharts-datalabel-value" style="font-family: &quot;Public Sans&quot;;">38%</text></g></g><line id="SvgjsLine2072" x1="0" y1="0" x2="141" y2="0" stroke="#b6b6b6" stroke-dasharray="0" stroke-width="1" stroke-linecap="butt" class="apexcharts-ycrosshairs"></line><line id="SvgjsLine2073" x1="0" y1="0" x2="141" y2="0" stroke-dasharray="0" stroke-width="0" stroke-linecap="butt" class="apexcharts-ycrosshairs-hidden"></line></g><g id="SvgjsG2054" class="apexcharts-annotations"></g></svg><div class="apexcharts-legend"></div><div class="apexcharts-tooltip apexcharts-theme-dark"><div class="apexcharts-tooltip-series-group" style="order: 1;"><span class="apexcharts-tooltip-marker" style="background-color: rgb(105, 108, 255);"></span><div class="apexcharts-tooltip-text" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;"><div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-y-label"></span><span class="apexcharts-tooltip-text-y-value"></span></div><div class="apexcharts-tooltip-goals-group"><span class="apexcharts-tooltip-text-goals-label"></span><span class="apexcharts-tooltip-text-goals-value"></span></div><div class="apexcharts-tooltip-z-group"><span class="apexcharts-tooltip-text-z-label"></span><span class="apexcharts-tooltip-text-z-value"></span></div></div></div><div class="apexcharts-tooltip-series-group" style="order: 2;"><span class="apexcharts-tooltip-marker" style="background-color: rgb(133, 146, 163);"></span><div class="apexcharts-tooltip-text" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;"><div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-y-label"></span><span class="apexcharts-tooltip-text-y-value"></span></div><div class="apexcharts-tooltip-goals-group"><span class="apexcharts-tooltip-text-goals-label"></span><span class="apexcharts-tooltip-text-goals-value"></span></div><div class="apexcharts-tooltip-z-group"><span class="apexcharts-tooltip-text-z-label"></span><span class="apexcharts-tooltip-text-z-value"></span></div></div></div><div class="apexcharts-tooltip-series-group" style="order: 3;"><span class="apexcharts-tooltip-marker" style="background-color: rgb(3, 195, 236);"></span><div class="apexcharts-tooltip-text" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;"><div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-y-label"></span><span class="apexcharts-tooltip-text-y-value"></span></div><div class="apexcharts-tooltip-goals-group"><span class="apexcharts-tooltip-text-goals-label"></span><span class="apexcharts-tooltip-text-goals-value"></span></div><div class="apexcharts-tooltip-z-group"><span class="apexcharts-tooltip-text-z-label"></span><span class="apexcharts-tooltip-text-z-value"></span></div></div></div><div class="apexcharts-tooltip-series-group" style="order: 4;"><span class="apexcharts-tooltip-marker" style="background-color: rgb(113, 221, 55);"></span><div class="apexcharts-tooltip-text" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;"><div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-y-label"></span><span class="apexcharts-tooltip-text-y-value"></span></div><div class="apexcharts-tooltip-goals-group"><span class="apexcharts-tooltip-text-goals-label"></span><span class="apexcharts-tooltip-text-goals-value"></span></div><div class="apexcharts-tooltip-z-group"><span class="apexcharts-tooltip-text-z-label"></span><span class="apexcharts-tooltip-text-z-value"></span></div></div></div></div></div></div>
-                      <div class="resize-triggers"><div class="expand-trigger"><div style="width: 361px; height: 139px;"></div></div><div class="contract-trigger"></div></div></div>
-                      <ul class="p-0 m-0">
-                        <li class="d-flex mb-4 pb-1">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <span class="avatar-initial rounded bg-label-primary"><i class="bx bx-mobile-alt"></i></span>
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <h6 class="mb-0">Electronic</h6>
-                              <small class="text-muted">Mobile, Earbuds, TV</small>
-                            </div>
-                            <div class="user-progress">
-                              <small class="fw-medium">82.5k</small>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="d-flex mb-4 pb-1">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <span class="avatar-initial rounded bg-label-success"><i class="bx bx-closet"></i></span>
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <h6 class="mb-0">Fashion</h6>
-                              <small class="text-muted">T-shirt, Jeans, Shoes</small>
-                            </div>
-                            <div class="user-progress">
-                              <small class="fw-medium">23.8k</small>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="d-flex mb-4 pb-1">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <span class="avatar-initial rounded bg-label-info"><i class="bx bx-home-alt"></i></span>
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <h6 class="mb-0">Decor</h6>
-                              <small class="text-muted">Fine Art, Dining</small>
-                            </div>
-                            <div class="user-progress">
-                              <small class="fw-medium">849k</small>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="d-flex">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <span class="avatar-initial rounded bg-label-secondary"><i class="bx bx-football"></i></span>
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <h6 class="mb-0">Sports</h6>
-                              <small class="text-muted">Football, Cricket Kit</small>
-                            </div>
-                            <div class="user-progress">
-                              <small class="fw-medium">99</small>
-                            </div>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-                <!--/ Order Statistics -->
-              
-                <!-- Expense Overview -->
-                <div class="col-md-6 col-lg-4 order-1 mb-4">
-                  <div class="card h-100">
-                    <div class="card-header">
-                      <ul class="nav nav-pills" role="tablist">
-                        <li class="nav-item" role="presentation">
-                          <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-tabs-line-card-income" aria-controls="navs-tabs-line-card-income" aria-selected="true">Income</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                          <button type="button" class="nav-link" role="tab" aria-selected="false" tabindex="-1">Expenses</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                          <button type="button" class="nav-link" role="tab" aria-selected="false" tabindex="-1">Profit</button>
-                        </li>
-                      </ul>
-                    </div>
-                    <div class="card-body px-0">
-                      <div class="tab-content p-0">
-                        <div class="tab-pane fade show active" id="navs-tabs-line-card-income" role="tabpanel" style="position: relative;">
-                          <div class="d-flex p-4 pt-3">
-                            <div class="avatar flex-shrink-0 me-3">
-                              <img src="../assets/img/icons/unicons/wallet.png" alt="User">
-                            </div>
-                            <div>
-                              <small class="text-muted d-block">Total Balance</small>
-                              <div class="d-flex align-items-center">
-                                <h6 class="mb-0 me-1">$459.10</h6>
-                                <small class="text-success fw-medium">
-                                  <i class="bx bx-chevron-up"></i>
-                                  42.9%
-                                </small>
-                              </div>
-                            </div>
-                          </div>
-                          
-                          <div class="d-flex justify-content-center pt-4 gap-2">
-                            <div class="flex-shrink-0" style="position: relative;">
-                              <div id="expensesOfWeek" style="min-height: 57.7px;"><div id="apexcharts4dgawahb" class="apexcharts-canvas apexcharts4dgawahb apexcharts-theme-light" style="width: 60px; height: 57.7px;"><svg id="SvgjsSvg1870" width="60" height="57.7" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev" class="apexcharts-svg" xmlns:data="ApexChartsNS" transform="translate(0, 0)" style="background: transparent;"><g id="SvgjsG1872" class="apexcharts-inner apexcharts-graphical" transform="translate(-10, -10)"><defs id="SvgjsDefs1871"><clipPath id="gridRectMask4dgawahb"><rect id="SvgjsRect1874" width="86" height="87" x="-3" y="-1" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect></clipPath><clipPath id="forecastMask4dgawahb"></clipPath><clipPath id="nonForecastMask4dgawahb"></clipPath><clipPath id="gridRectMarkerMask4dgawahb"><rect id="SvgjsRect1875" width="84" height="89" x="-2" y="-2" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect></clipPath></defs><g id="SvgjsG1876" class="apexcharts-radialbar"><g id="SvgjsG1877"><g id="SvgjsG1878" class="apexcharts-tracks"><g id="SvgjsG1879" class="apexcharts-radialbar-track apexcharts-track" rel="1"><path id="apexcharts-radialbarTrack-0" d="M 40 18.098170731707313 A 21.901829268292687 21.901829268292687 0 1 1 39.99617740968999 18.098171065291247" fill="none" fill-opacity="1" stroke="rgba(236,238,241,0.85)" stroke-opacity="1" stroke-linecap="round" stroke-width="2.0408536585365864" stroke-dasharray="0" class="apexcharts-radialbar-area" data:pathOrig="M 40 18.098170731707313 A 21.901829268292687 21.901829268292687 0 1 1 39.99617740968999 18.098171065291247"></path></g></g><g id="SvgjsG1881"><g id="SvgjsG1885" class="apexcharts-series apexcharts-radial-series" seriesName="seriesx1" rel="1" data:realIndex="0"><path id="SvgjsPath1886" d="M 40 18.098170731707313 A 21.901829268292687 21.901829268292687 0 1 1 22.2810479140526 52.873572242130095" fill="none" fill-opacity="0.85" stroke="rgba(105,108,255,0.85)" stroke-opacity="1" stroke-linecap="round" stroke-width="4.081707317073173" stroke-dasharray="0" class="apexcharts-radialbar-area apexcharts-radialbar-slice-0" data:angle="234" data:value="65" index="0" j="0" data:pathOrig="M 40 18.098170731707313 A 21.901829268292687 21.901829268292687 0 1 1 22.2810479140526 52.873572242130095"></path></g><circle id="SvgjsCircle1882" r="18.881402439024395" cx="40" cy="40" class="apexcharts-radialbar-hollow" fill="transparent"></circle><g id="SvgjsG1883" class="apexcharts-datalabels-group" transform="translate(0, 0) scale(1)" style="opacity: 1;"><text id="SvgjsText1884" font-family="Helvetica, Arial, sans-serif" x="40" y="45" text-anchor="middle" dominant-baseline="auto" font-size="13px" font-weight="400" fill="#697a8d" class="apexcharts-text apexcharts-datalabel-value" style="font-family: Helvetica, Arial, sans-serif;">$65</text></g></g></g></g><line id="SvgjsLine1887" x1="0" y1="0" x2="80" y2="0" stroke="#b6b6b6" stroke-dasharray="0" stroke-width="1" stroke-linecap="butt" class="apexcharts-ycrosshairs"></line><line id="SvgjsLine1888" x1="0" y1="0" x2="80" y2="0" stroke-dasharray="0" stroke-width="0" stroke-linecap="butt" class="apexcharts-ycrosshairs-hidden"></line></g><g id="SvgjsG1873" class="apexcharts-annotations"></g></svg><div class="apexcharts-legend"></div></div></div>
-                            <div class="resize-triggers"><div class="expand-trigger"><div style="width: 61px; height: 59px;"></div></div><div class="contract-trigger"></div></div></div>
-                            <div>
-                              <p class="mb-n1 mt-1">Expenses This Week</p>
-                              <small class="text-muted">$39 less than last week</small>
-                            </div>
-                          </div>
-                        <div class="resize-triggers"><div class="expand-trigger"><div style="width: 409px; height: 377px;"></div></div><div class="contract-trigger"></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!--/ Expense Overview -->
-              
-                <!-- Transactions -->
-                <div class="col-md-6 col-lg-4 order-2 mb-4">
-                  <div class="card h-100">
-                    <div class="card-header d-flex align-items-center justify-content-between">
-                      <h5 class="card-title m-0 me-2">Transactions</h5>
-                      <div class="dropdown">
-                        <button class="btn p-0" type="button" id="transactionID" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <i class="bx bx-dots-vertical-rounded"></i>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="transactionID">
-                          <a class="dropdown-item" href="javascript:void(0);">Last 28 Days</a>
-                          <a class="dropdown-item" href="javascript:void(0);">Last Month</a>
-                          <a class="dropdown-item" href="javascript:void(0);">Last Year</a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="card-body">
-                      <ul class="p-0 m-0">
-                        <li class="d-flex mb-4 pb-1">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <img src="../assets/img/icons/unicons/paypal.png" alt="User" class="rounded">
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <small class="text-muted d-block mb-1">Paypal</small>
-                              <h6 class="mb-0">Send money</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-1">
-                              <h6 class="mb-0">+82.6</h6> <span class="text-muted">USD</span>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="d-flex mb-4 pb-1">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <img src="../assets/img/icons/unicons/wallet.png" alt="User" class="rounded">
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <small class="text-muted d-block mb-1">Wallet</small>
-                              <h6 class="mb-0">Mac'D</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-1">
-                              <h6 class="mb-0">+270.69</h6> <span class="text-muted">USD</span>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="d-flex mb-4 pb-1">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <img src="../assets/img/icons/unicons/chart.png" alt="User" class="rounded">
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <small class="text-muted d-block mb-1">Transfer</small>
-                              <h6 class="mb-0">Refund</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-1">
-                              <h6 class="mb-0">+637.91</h6> <span class="text-muted">USD</span>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="d-flex mb-4 pb-1">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <img src="../assets/img/icons/unicons/cc-success.png" alt="User" class="rounded">
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <small class="text-muted d-block mb-1">Credit Card</small>
-                              <h6 class="mb-0">Ordered Food</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-1">
-                              <h6 class="mb-0">-838.71</h6> <span class="text-muted">USD</span>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="d-flex mb-4 pb-1">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <img src="../assets/img/icons/unicons/wallet.png" alt="User" class="rounded">
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <small class="text-muted d-block mb-1">Wallet</small>
-                              <h6 class="mb-0">Starbucks</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-1">
-                              <h6 class="mb-0">+203.33</h6> <span class="text-muted">USD</span>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="d-flex">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <img src="../assets/img/icons/unicons/cc-warning.png" alt="User" class="rounded">
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <small class="text-muted d-block mb-1">Mastercard</small>
-                              <h6 class="mb-0">Ordered Food</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-1">
-                              <h6 class="mb-0">-92.45</h6> <span class="text-muted">USD</span>
-                            </div>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-                <!--/ Transactions -->
-              </div>
         </div>
+            
+        <div class="col-12 mb-4">
+          <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-center align-items-center flex-sm-column flex-row gap-3">
+                    <form method="post" class="form-inline">
+                        {% csrf_token %}
+                        
+                        <div class="form-group">
+                          <label for="sugerenciasUbicacion">Ubicación:</label>
+                          <select id="sugerenciasUbicacion" name="ubicacion" class="form-control select2">
+                              <option value="" selected>Selecciona una opción</option>
+                              {% for sugerencia in sugerencias_ubicacion %}
+                                  <option value="{{ sugerencia }}">{{ sugerencia }}</option>
+                              {% endfor %}
+                          </select>
+                      </div>
+                      
+                      <div class="form-group">
+                          <label for="sugerenciasNombre">Nombre:</label>
+                          <select id="sugerenciasNombre" name="nombre" class="form-control select2">
+                              <option value="" selected>Selecciona una opción</option>
+                              {% for sugerencia in sugerencias_nombre %}
+                                  <option value="{{ sugerencia }}">{{ sugerencia }}</option>
+                              {% endfor %}
+                          </select>
+                      </div>
+                      
+                      <div class="form-group">
+                          <label for="sugerenciasBio">Bio:</label>
+                          <select id="sugerenciasBio" name="bio" class="form-control select2">
+                              <option value="" selected>Selecciona una opción</option>
+                              {% for sugerencia in sugerencias_bio %}
+                                  <option value="{{ sugerencia }}">{{ sugerencia }}</option>
+                              {% endfor %}
+                          </select>
+                      </div>
+                      
+                      
+                
+                        <button type="submit" class="btn btn-primary" name="action" value="filtrar">Filtrar</button>
+                    </form>
+                
+                    <!-- Tabla para mostrar los equipos filtrados -->
+                    
+                    <table class="table table-bordered table-striped  mt-3">
+                        <thead>
+                            <tr>
+                                
+                                <th>Porcentaje de cumplimiento</th>
+                                <th>Ubicación</th>
+                                <th>Bio</th>
+                                <th>Nombre</th>
+                                <th>Sede</th>
+                                <!-- Otros encabezados de columnas -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for equipo in equipos_filtrados %}
+                                <tr>
+                            
+                                    <td>{{ equipo.porcentajedecumplimiento }}</td>
+                                    <td>{{ equipo.ubicacion }}</td>
+                                    <td>{{ equipo.bio }}</td>
+                                    <td>{{ equipo.nombre }}</td>
+                                    <td>{{ equipo.sede }}</td>
+                                    <!-- Otros campos de equipo -->
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="5">No se encontraron equipos que coincidan con la búsqueda.</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+          </div>
+        </div>
+             
+        <div class="row">
+               
+          <div class="col-md-6 col-lg-4 col-xl-4 order-0 mb-4">
+            <div class="card h-100">
+              <div class="card-header d-flex align-items-center justify-content-between pb-0">
+                <div class="card-title mb-0">
+                  <h5 class="m-0 me-2">Porcentaje promedio del estado de cumplimiento</h5>
+                  <small class="text-muted">Equipos</small>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3" style="position: relative;">
+                  
+                  <div id="orderStatisticsChart" style="min-height: 137.55px;"><div id="apexchartsn1fl0ujdh" class="apexcharts-canvas apexchartsn1fl0ujdh apexcharts-theme-light" style="width: 130px; height: 137.55px;">
+                  <svg id="SvgjsSvg2051" width="130" height="137.55" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev" class="apexcharts-svg" xmlns:data="ApexChartsNS" transform="translate(0, 0)" style="background: transparent;">
+                    <g id="SvgjsG2053" class="apexcharts-inner apexcharts-graphical" transform="translate(-7, 0)"><defs id="SvgjsDefs2052">
+                      <clipPath id="gridRectMaskn1fl0ujdh"><rect id="SvgjsRect2055" width="150" height="173" x="-4.5" y="-2.5" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect>
+                      </clipPath><clipPath id="forecastMaskn1fl0ujdh"></clipPath><clipPath id="nonForecastMaskn1fl0ujdh"></clipPath>
+                      <clipPath id="gridRectMarkerMaskn1fl0ujdh"><rect id="SvgjsRect2056" width="145" height="172" x="-2" y="-2" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect></clipPath>
+                    </defs><g id="SvgjsG2057" class="apexcharts-pie"><g id="SvgjsG2058" transform="translate(0, 0) scale(1)"><circle id="SvgjsCircle2059" r="44.835365853658544" cx="70.5" cy="70.5" fill="transparent"></circle>
+                      <g id="SvgjsG2060" class="apexcharts-slices"><g id="SvgjsG2061" class="apexcharts-series apexcharts-pie-series" seriesName="Electronic" rel="1" data:realIndex="0"><path id="SvgjsPath2062" d="M 70.5 10.71951219512195 A 59.78048780487805 59.78048780487805 0 0 1 97.63977353321047 123.7648046533095 L 90.85483014990785 110.44860348998213 A 44.835365853658544 44.835365853658544 0 0 0 70.5 25.664634146341456 L 70.5 10.71951219512195 z" fill="rgba(105,108,255,1)" fill-opacity="1" stroke-opacity="1" stroke-linecap="butt" stroke-width="5" stroke-dasharray="0" class="apexcharts-pie-area apexcharts-donut-slice-0" index="0" j="0" data:angle="153" data:startAngle="0" data:strokeWidth="5" data:value="85" data:pathOrig="M 70.5 10.71951219512195 A 59.78048780487805 59.78048780487805 0 0 1 97.63977353321047 123.7648046533095 L 90.85483014990785 110.44860348998213 A 44.835365853658544 44.835365853658544 0 0 0 70.5 25.664634146341456 L 70.5 10.71951219512195 z" stroke="#ffffff"></path></g><g id="SvgjsG2063" class="apexcharts-series apexcharts-pie-series" seriesName="Sports" rel="2" data:realIndex="1">
+                      <path id="SvgjsPath2064" d="M 97.63977353321047 123.7648046533095 A 59.78048780487805 59.78048780487805 0 0 1 70.5 130.28048780487805 L 70.5 115.33536585365854 A 44.835365853658544 44.835365853658544 0 0 0 90.85483014990785 110.44860348998213 L 97.63977353321047 123.7648046533095 z" fill="rgba(133,146,163,1)" fill-opacity="1" stroke-opacity="1" stroke-linecap="butt" stroke-width="5" stroke-dasharray="0" class="apexcharts-pie-area apexcharts-donut-slice-1" index="0" j="1" data:angle="27" data:startAngle="153" data:strokeWidth="5" data:value="15" data:pathOrig="M 97.63977353321047 123.7648046533095 A 59.78048780487805 59.78048780487805 0 0 1 70.5 130.28048780487805 L 70.5 115.33536585365854 A 44.835365853658544 44.835365853658544 0 0 0 90.85483014990785 110.44860348998213 L 97.63977353321047 123.7648046533095 z" stroke="#ffffff"></path></g><g id="SvgjsG2065" class="apexcharts-series apexcharts-pie-series" seriesName="Decor" rel="3" data:realIndex="2"><path id="SvgjsPath2066" d="M 70.5 130.28048780487805 A 59.78048780487805 59.78048780487805 0 0 1 10.71951219512195 70.50000000000001 L 25.664634146341456 70.5 A 44.835365853658544 44.835365853658544 0 0 0 70.5 115.33536585365854 L 70.5 130.28048780487805 z" fill="rgba(3,195,236,1)" fill-opacity="1" stroke-opacity="1" stroke-linecap="butt" stroke-width="5" stroke-dasharray="0" class="apexcharts-pie-area apexcharts-donut-slice-2" index="0" j="2" data:angle="90" data:startAngle="180" data:strokeWidth="5" data:value="50" data:pathOrig="M 70.5 130.28048780487805 A 59.78048780487805 59.78048780487805 0 0 1 10.71951219512195 70.50000000000001 L 25.664634146341456 70.5 A 44.835365853658544 44.835365853658544 0 0 0 70.5 115.33536585365854 L 70.5 130.28048780487805 z" stroke="#ffffff"></path></g><g id="SvgjsG2067" class="apexcharts-series apexcharts-pie-series" seriesName="Fashion" rel="4" data:realIndex="3"><path id="SvgjsPath2068" d="M 10.71951219512195 70.50000000000001 A 59.78048780487805 59.78048780487805 0 0 1 70.48956633664653 10.719513105630845 L 70.4921747524849 25.664634829223125 A 44.835365853658544 44.835365853658544 0 0 0 25.664634146341456 70.5 L 10.71951219512195 70.50000000000001 z" fill="rgba(113,221,55,1)" fill-opacity="1" stroke-opacity="1" stroke-linecap="butt" stroke-width="5" stroke-dasharray="0" class="apexcharts-pie-area apexcharts-donut-slice-3" index="0" j="3" data:angle="90" data:startAngle="270" data:strokeWidth="5" data:value="50" data:pathOrig="M 10.71951219512195 70.50000000000001 A 59.78048780487805 59.78048780487805 0 0 1 70.48956633664653 10.719513105630845 L 70.4921747524849 25.664634829223125 A 44.835365853658544 44.835365853658544 0 0 0 25.664634146341456 70.5 L 10.71951219512195 70.50000000000001 z" stroke="#ffffff"></path></g></g></g><g id="SvgjsG2069" class="apexcharts-datalabels-group" transform="translate(0, 0) scale(1)"><text id="SvgjsText2070" font-family="Helvetica, Arial, sans-serif" x="70.5" y="90.5" text-anchor="middle" dominant-baseline="auto" font-size="0.8125rem" font-weight="400" fill="#373d3f" class="apexcharts-text apexcharts-datalabel-label" style="font-family: Helvetica, Arial, sans-serif;">Cumplimiento</text><text id="SvgjsText2071" font-family="Public Sans" x="70.5" y="71.5" text-anchor="middle" dominant-baseline="auto" font-size="1.5rem" font-weight="400" fill="#566a7f" class="apexcharts-text apexcharts-datalabel-value" >{{promedio_cumplimiento}}%</text></g></g><line id="SvgjsLine2072" x1="0" y1="0" x2="141" y2="0" stroke="#b6b6b6" stroke-dasharray="0" stroke-width="1" stroke-linecap="butt" class="apexcharts-ycrosshairs"></line><line id="SvgjsLine2073" x1="0" y1="0" x2="141" y2="0" stroke-dasharray="0" stroke-width="0" stroke-linecap="butt" class="apexcharts-ycrosshairs-hidden"></line></g><g id="SvgjsG2054" class="apexcharts-annotations"></g></svg><div class="apexcharts-legend"></div><div class="apexcharts-tooltip apexcharts-theme-dark"><div class="apexcharts-tooltip-series-group" style="order: 1;"><span class="apexcharts-tooltip-marker" style="background-color: rgb(105, 108, 255);"></span><div class="apexcharts-tooltip-text" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;"><div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-y-label"></span><span class="apexcharts-tooltip-text-y-value"></span></div><div class="apexcharts-tooltip-goals-group"><span class="apexcharts-tooltip-text-goals-label"></span><span class="apexcharts-tooltip-text-goals-value"></span></div><div class="apexcharts-tooltip-z-group"><span class="apexcharts-tooltip-text-z-label"></span><span class="apexcharts-tooltip-text-z-value"></span></div></div></div><div class="apexcharts-tooltip-series-group" style="order: 2;"><span class="apexcharts-tooltip-marker" style="background-color: rgb(133, 146, 163);"></span><div class="apexcharts-tooltip-text" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;"><div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-y-label"></span><span class="apexcharts-tooltip-text-y-value"></span></div><div class="apexcharts-tooltip-goals-group"><span class="apexcharts-tooltip-text-goals-label"></span><span class="apexcharts-tooltip-text-goals-value"></span></div><div class="apexcharts-tooltip-z-group"><span class="apexcharts-tooltip-text-z-label"></span><span class="apexcharts-tooltip-text-z-value"></span></div></div></div><div class="apexcharts-tooltip-series-group" style="order: 3;"><span class="apexcharts-tooltip-marker" style="background-color: rgb(3, 195, 236);"></span><div class="apexcharts-tooltip-text" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;"><div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-y-label"></span><span class="apexcharts-tooltip-text-y-value"></span></div><div class="apexcharts-tooltip-goals-group"><span class="apexcharts-tooltip-text-goals-label"></span><span class="apexcharts-tooltip-text-goals-value"></span></div><div class="apexcharts-tooltip-z-group"><span class="apexcharts-tooltip-text-z-label"></span><span class="apexcharts-tooltip-text-z-value"></span></div></div></div><div class="apexcharts-tooltip-series-group" style="order: 4;"><span class="apexcharts-tooltip-marker" style="background-color: rgb(113, 221, 55);"></span><div class="apexcharts-tooltip-text" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;"><div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-y-label"></span><span class="apexcharts-tooltip-text-y-value"></span></div><div class="apexcharts-tooltip-goals-group"><span class="apexcharts-tooltip-text-goals-label"></span><span class="apexcharts-tooltip-text-goals-value"></span></div><div class="apexcharts-tooltip-z-group"><span class="apexcharts-tooltip-text-z-label"></span><span class="apexcharts-tooltip-text-z-value"></span></div></div></div></div></div></div>
+                <div class="resize-triggers"><div class="expand-trigger"><div style="width: 361px; height: 139px;"></div></div><div class="contract-trigger"></div></div></div>
+                
+                
+                <div class="progress">
+                  <div class="progress-bar" role="progressbar" style="width: {{promedio_cumplimiento}}%"  aria-valuenow="{{ promedio_cumplimiento }}" aria-valuemin="0" aria-valuemax="100">{{ promedio_cumplimiento }}%</div>
+                <ul class="p-0 m-0">
+                
+                </ul>
+              </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-6 col-lg-4 order-1 mb-4">
+            <form method="post" class="form-inline">
+            <div class="card h-100">
+              <div class="card-header">
+                <ul class="nav nav-pills" role="tablist">
+                  <li class="nav-item" role="presentation">
+                    <h5 class="m-0 me-2">Porcentaje promedio del estado de cumplimiento por consultorio</h5>
+                    <small class="text-muted">Consultorios</small>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="card-body px-0">
+                <div class="tab-content p-0">
+                  <div class="tab-pane fade show active" id="navs-tabs-line-card-income" role="tabpanel" style="position: relative;">
+                    <div class="d-flex p-4 pt-3">
+
+                      <form method="post" class="form-inline">
+
+                        {% csrf_token %}
+
+                      <div class="row">
+                          <div class="col-md-6">
+                
+                              <select id="sugerenciasUbicacion" name="ubicacion" class="form-control select2">
+                                  <option value="" selected>- - -</option>
+                                  {% for sugerencia in sugerencias_ubicacion %}
+                                      <option value="{{ sugerencia }}">{{ sugerencia }}</option>
+                                  {% endfor %}
+                              </select>
+                          </div>
+
+                          <div class="col-md-6">
+                              <button type="submit" class="btn btn-primary" name="action" value="filtrarConsultorio">Consultar</button>
+                          </div>
+                      </div>
+                      </form>
+                      
+                    </div>
+                    
+                    </div>
+                  </div>   
+              </div>
+            </div>
+          
+          </div>
+          
+          <div class="col-md-6 col-lg-4 order-2 mb-4">
+            <div class="card h-100">
+              <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="card-title m-0 me-2">Dotación por consultorio</h5>
+                <small class="text-muted">Consultorios</small>
+                
+                </div>
+
+                  <div class="card-body px-0">
+                    <div class="tab-content p-0">
+                      <div class="tab-pane fade show active" id="navs-tabs-line-card-income" role="tabpanel" style="position: relative;">
+                        <div class="d-flex p-4 pt-3">
+
+                          <form method="post" class="form-inline">
+
+                            {% csrf_token %}
+
+                          <div class="row">
+                              <div class="col-md-6">
+                    
+                                  <select id="sugerenciasUbicacion" name="ubicacionconsultorio" class="form-control select2">
+                                      <option value="" selected>- - -</option>
+                                      {% for sugerencia in sugerencias_ubicacion %}
+                                          <option value="{{ sugerencia }}">{{ sugerencia }}</option>
+                                      {% endfor %}
+                                  </select>
+                              </div>
+
+                              <div class="col-md-6">
+                                  <button type="submit" class="btn btn-primary" name="action" value="verConsultorio">Ver Consultorio</button>
+                              </div>
+                          </div>
+                          </form>
+                          
+                        </div>
+                        
+                        </div>
+                        <div class="table-responsive w-80">
+                          <table class="table w-80">
+                              <thead>
+                                  <tr>
+                                      <th style="width: 60%;">Nombre del Equipo</th>
+                                      
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  {% for equipo in equiposconsultorio %}
+                                      <tr>
+                                          <td style="width: 60%;"> {{ equipo.nombre }} </td>
+                                          
+                                      </tr>
+                                  {% endfor %}
+                              </tbody>
+                          </table>
+                      </div>
+                      </div>   
+                  </div>
+                  
+                  
+              </div>
+            </div>
+        </div>
+
     </div>
-    
-</div>
+  </div>
 
-<script>
-    // Datos de ejemplo (reemplaza esto con tus propios datos)
-    var serviciosData = {
-        labels: ['Consulta Externa', 'UCI', 'Urgencias', 'Hospitalización', 'Servicios Farmacéuticos'],
-        datasets: [{
-            label: 'Servicios Habilitados',
-            data: [50, 30, 25, 40, 60], // Aquí debes ingresar tus datos reales
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)'
-            ],
-            borderWidth: 1
-        }]
-    };
 
-    // Configuración del gráfico
-    var serviciosOptions = {
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        }
-    };
-
-    // Obtén el contexto del canvas
-    var ctx = document.getElementById('serviciosChart').getContext('2d');
-
-    // Crea el gráfico
-    var serviciosChart = new Chart(ctx, {
-        type: 'bar',
-        data: serviciosData,
-        options: serviciosOptions
-    });
-</script>
-
-<!-- Scripts de Bootstrap (jQuery y Popper.js) -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-{% endblock %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Include Bootstrap and Typeahead.js CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<!-- CSS de Select2 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+<!-- JavaScript de Select2 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+
+
 </body>
 </html>
+{% endblock %}
