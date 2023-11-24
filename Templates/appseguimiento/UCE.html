@@ -19,11 +19,17 @@
 </head>
 
 <body>
-
+  <div class="main-content" style="margin-left: 50px;"> 
     <div id="content" >
       <div class="table-responsive">
-
-        <h2>SERVICIO DE CONSULTA EXTERNA</h2>
+        <figure>
+          <blockquote class="blockquote">
+            <p class="display-5">Unidad de cuidados especiales</p>
+          </blockquote>
+          <figcaption class="blockquote-footer">
+            <cite title="Título fuente">UCE</cite>
+          </figcaption>
+        </figure>
         <div class="row">
             <div class="col-lg-8 mb-4 order-0">
               <div class="card my-0">
@@ -31,55 +37,85 @@
                   <div class="card-body">
                     <h5 class="card-title text-primary">Estándar de dotación</h5>
                     <div class="table-responsive w-80">
-                        <table class="table w-80">
-                            <thead>
-                                <tr>
-                                    <th style="width: 60%;">Nombre del Equipo</th>
-                                    <th style="width: 40%;">Número de unidades</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for nombre, count in conteo_equipos.items %}
-                                    <tr>
-                                        <td style="width: 60%;">{{ nombre }}</td>
-                                        <td style="width: 40%;">{{ count }}</td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>          
-                </div>
-              </div>
-            </div>
+                      
+                      <div class="d-flex justify-content-between align-items-center mb-3">
+                       Disponibilidad de:
 
-            <div class="col-lg-4 col-md-4 order-1">
-                <div class="col-lg-12 col-md-12 col-6 mb-4">
-                  <div class="card mb-5">
-                    <div class="card-body">
-                      <div class="card-title d-flex align-items-start justify-content-between">
-                        <div class="avatar flex-shrink-0">
-                        </div>
                       </div>
-                      <span>Total de consultorios habilitados</span>
-                      <h3 class="card-title text-nowrap mb-1"> {{ total_consultorios }} </h3>
-                      <small class="text-success fw-medium"><i class="bx bx-up-arrow-alt"></i> %</small>
+                      
+                        <!-- Botón para abrir el modal -->
+                      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#miModal">
+                        Ver equipos
+                      </button>
+
+                      <!-- Modal -->
+                      <div class="modal fade" id="miModal" tabindex="-1" role="dialog" aria-labelledby="miModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="miModalLabel">Tabla de Equipos</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- Contenido de la tabla aquí -->
+                                    <table class="table w-100">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 60%;">Nombre del Equipo</th>
+                                                <th style="width: 40%;">Número de unidades</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for nombre, count in conteo_equipos.items %}
+                                                <tr>
+                                                    <td style="width: 60%;">{{ nombre }}</td>
+                                                    <td style="width: 40%;">{{ count }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                      </div>  
+                        </div>
+                      </div>          
+                      </div>
                     </div>
                   </div>
-                  <div class="card mb-5">
-                    <div class="card-body">
-                      <div class="card-title d-flex align-items-start justify-content-between">
-                        <div class="avatar flex-shrink-0">
+
+                  <div class="col-lg-4 col-md-4 order-1">
+                      <div class="col-lg-12 col-md-12 col-6 mb-4">
+                        <div class="card mb-5">
+                          <div class="card-body">
+                            <div class="card-title d-flex align-items-start justify-content-between">
+                              <div class="avatar flex-shrink-0">
+                              </div>
+                            </div>
+                            <span>Total de cubículos habilitados</span>
+                            <h3 class="card-title text-nowrap mb-1"> {{ cubiculos_disponibles }} </h3>
+                            <small class="text-success fw-medium"><i class="bx bx-up-arrow-alt"></i> {{por_cubiculos_disponibles}}%</small>
+                          </div>
+                        </div>
+                        <div class="card mb-5">
+                          <div class="card-body">
+                            <div class="card-title d-flex align-items-start justify-content-between">
+                              <div class="avatar flex-shrink-0">
+                              </div>
+                            </div>
+                            <span>Total de cubículos disponibles</span>
+                            <h3 class="card-title text-nowrap mb-1"> {{ total_consultorios}} </h3>
+                            <small class="text-success fw-medium"><i class="bx bx-up-arrow-alt"></i>100%</small>
+                          </div>
                         </div>
                       </div>
-                      <span>Total de consultorios disponibles</span>
-                      <h3 class="card-title text-nowrap mb-1"> {{ total_consultorios}} </h3>
-                      <small class="text-success fw-medium"><i class="bx bx-up-arrow-alt"></i>  {{total_consultorios}}</small>
-                    </div>
                   </div>
-                </div>
-            </div>
-        </div>
+              </div>
             
         <div class="col-12 mb-4">
           <div class="card">
@@ -87,40 +123,46 @@
                 <div class="d-flex justify-content-center align-items-center flex-sm-column flex-row gap-3">
                     <form method="post" class="form-inline">
                         {% csrf_token %}
+                        <div class="row">
+                          <div class="col-md-2 mb-2">
+                              <div class="form-group">
+                                  <select id="sugerenciasUbicacion" name="ubicacion" class="form-control select2">
+                                      <option value="" selected>Ubicación</option>
+                                      {% for sugerencia in sugerencias_ubicacion %}
+                                          <option value="{{ sugerencia }}">{{ sugerencia }}</option>
+                                      {% endfor %}
+                                  </select>
+                              </div>
+                          </div>
+                      
+                          <div class="col-md-4 mb-2">
+                              <div class="form-group">
+                                  <select id="sugerenciasNombre" name="nombre" class="form-control select2">
+                                      <option value="" selected>Nombre</option>
+                                      {% for sugerencia in sugerencias_nombre %}
+                                          <option value="{{ sugerencia }}">{{ sugerencia }}</option>
+                                      {% endfor %}
+                                  </select>
+                              </div>
+                          </div>
+                      
+                          <div class="col-md-2 mb-2">
+                              <div class="form-group">
+                                  <select id="sugerenciasBio" name="bio" class="form-control select2">
+                                      <option value="" selected>Bio</option>
+                                      {% for sugerencia in sugerencias_bio %}
+                                          <option value="{{ sugerencia }}">{{ sugerencia }}</option>
+                                      {% endfor %}
+                                  </select>
+                              </div>
+                          </div>
+                      
+                          <div class="col-md-2 mb-3">
+                              <button type="submit" class="btn btn-primary" name="action" value="filtrar">Filtrar</button>
+                          </div>
+                      </div>
+                      
                         
-                        <div class="form-group">
-                          <label for="sugerenciasUbicacion">Ubicación:</label>
-                          <select id="sugerenciasUbicacion" name="ubicacion" class="form-control select2">
-                              <option value="" selected>Selecciona una opción</option>
-                              {% for sugerencia in sugerencias_ubicacion %}
-                                  <option value="{{ sugerencia }}">{{ sugerencia }}</option>
-                              {% endfor %}
-                          </select>
-                      </div>
-                      
-                      <div class="form-group">
-                          <label for="sugerenciasNombre">Nombre:</label>
-                          <select id="sugerenciasNombre" name="nombre" class="form-control select2">
-                              <option value="" selected>Selecciona una opción</option>
-                              {% for sugerencia in sugerencias_nombre %}
-                                  <option value="{{ sugerencia }}">{{ sugerencia }}</option>
-                              {% endfor %}
-                          </select>
-                      </div>
-                      
-                      <div class="form-group">
-                          <label for="sugerenciasBio">Bio:</label>
-                          <select id="sugerenciasBio" name="bio" class="form-control select2">
-                              <option value="" selected>Selecciona una opción</option>
-                              {% for sugerencia in sugerencias_bio %}
-                                  <option value="{{ sugerencia }}">{{ sugerencia }}</option>
-                              {% endfor %}
-                          </select>
-                      </div>
-                      
-                      
-                
-                        <button type="submit" class="btn btn-primary" name="action" value="filtrar">Filtrar</button>
                     </form>
                 
                     <!-- Tabla para mostrar los equipos filtrados -->
@@ -160,8 +202,7 @@
           </div>
         </div>
              
-        <div class="row">
-               
+        <div class="row">    
           <div class="col-md-6 col-lg-4 col-xl-4 order-0 mb-4">
             <div class="card h-100">
               <div class="card-header d-flex align-items-center justify-content-between pb-0">
@@ -187,66 +228,66 @@
                 
                 <div class="progress">
                   <div class="progress-bar" role="progressbar" style="width: {{promedio_cumplimiento}}%"  aria-valuenow="{{ promedio_cumplimiento }}" aria-valuemin="0" aria-valuemax="100">{{ promedio_cumplimiento }}%</div>
-                <ul class="p-0 m-0">
-                
-                </ul>
+        
               </div>
               </div>
             </div>
           </div>
-          
-          <div class="col-md-6 col-lg-4 order-1 mb-4">
-            <form method="post" class="form-inline">
+
+          <div class="col-md-6 col-lg-4 col-xl-4 order-0 mb-4">
             <div class="card h-100">
-              <div class="card-header">
-                <ul class="nav nav-pills" role="tablist">
-                  <li class="nav-item" role="presentation">
-                    <h5 class="m-0 me-2">Porcentaje promedio del estado de cumplimiento por consultorio</h5>
-                    <small class="text-muted">Consultorios</small>
-                  </li>
-                </ul>
+              <div class="card-header d-flex align-items-center justify-content-between pb-0">
+                <div class="card-title mb-0">
+                  <h5 class="m-0 me-2">Pocentaje de cumplimiento por cubículo</h5>
+                  <small class="text-muted">Cubículos</small>
+                </div>
               </div>
+              <div class="card-body">
+                
+                <div class="tab-pane fade show active" id="navs-tabs-line-card-income" role="tabpanel" style="position: relative;">
+                  <div class="d-flex p-4 pt-3">
 
-              <div class="card-body px-0">
-                <div class="tab-content p-0">
-                  <div class="tab-pane fade show active" id="navs-tabs-line-card-income" role="tabpanel" style="position: relative;">
-                    <div class="d-flex p-4 pt-3">
+                    <form method="post" class="form-inline">
 
-                      <form method="post" class="form-inline">
-
-                        {% csrf_token %}
+                      {% csrf_token %}
 
                       <div class="row">
-                          <div class="col-md-6">
-                
-                              <select id="sugerenciasUbicacion" name="ubicacion" class="form-control select2">
-                                  <option value="" selected>- - -</option>
-                                  {% for sugerencia in sugerencias_ubicacion %}
-                                      <option value="{{ sugerencia }}">{{ sugerencia }}</option>
-                                  {% endfor %}
-                              </select>
-                          </div>
-
-                          <div class="col-md-6">
-                              <button type="submit" class="btn btn-primary" name="action" value="filtrarConsultorio">Consultar</button>
-                          </div>
-                      </div>
-                      </form>
-                      
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <select id="sugerenciasUbicacion" name="ubicacionconsultorio" class="form-control select2">
+                                    <option value="" selected>- - -</option>
+                                    {% for sugerencia in sugerencias_ubicacion %}
+                                        <option value="{{ sugerencia }}">{{ sugerencia }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary btn-block" name="action" value="verConsultorio"><i class="bi bi-search"></i></button>
+                            </div>
+                        </div>
                     </div>
+                    </form>
                     
-                    </div>
-                  </div>   
+                  </div>
+                  
+                  </div>
+                
+                <div class="progress">
+                  <div class="progress-bar" role="progressbar" style="width: {{porcentaje_cubiculo}}%"  aria-valuenow="{{ porcentaje_cubiculo }}" aria-valuemin="0" aria-valuemax="100">{{ porcentaje_cubiculo }}%</div>
+              </div>
               </div>
             </div>
-          
           </div>
+
+          
           
           <div class="col-md-6 col-lg-4 order-2 mb-4">
             <div class="card h-100">
               <div class="card-header d-flex align-items-center justify-content-between">
-                <h5 class="card-title m-0 me-2">Dotación por consultorio</h5>
-                <small class="text-muted">Consultorios</small>
+                <h5 class="card-title m-0 me-2">Dotación por cubículo</h5>
+                <small class="text-muted">cubículo</small>
                 
                 </div>
 
@@ -259,21 +300,24 @@
 
                             {% csrf_token %}
 
-                          <div class="row">
-                              <div class="col-md-6">
-                    
-                                  <select id="sugerenciasUbicacion" name="ubicacionconsultorio" class="form-control select2">
-                                      <option value="" selected>- - -</option>
-                                      {% for sugerencia in sugerencias_ubicacion %}
-                                          <option value="{{ sugerencia }}">{{ sugerencia }}</option>
-                                      {% endfor %}
-                                  </select>
+                            <div class="row">
+                              <div class="col-md-8">
+                                  <div class="form-group">
+                                      <select id="sugerenciasUbicacion" name="ubicacionconsultorio" class="form-control select2">
+                                          <option value="" selected>- - -</option>
+                                          {% for sugerencia in sugerencias_ubicacion %}
+                                              <option value="{{ sugerencia }}">{{ sugerencia }}</option>
+                                          {% endfor %}
+                                      </select>
+                                  </div>
                               </div>
-
-                              <div class="col-md-6">
-                                  <button type="submit" class="btn btn-primary" name="action" value="verConsultorio">Ver Consultorio</button>
+                              <div class="col-md-4">
+                                  <div class="form-group">
+                                      <button type="submit" class="btn btn-primary btn-block" name="action" value="verConsultorio"><i class="bi bi-search"></i></button>
+                                  </div>
                               </div>
                           </div>
+                          
                           </form>
                           
                         </div>
@@ -291,22 +335,28 @@
                                   {% for equipo in equiposconsultorio %}
                                       <tr>
                                           <td style="width: 60%;"> {{ equipo.nombre }} </td>
-                                          
+                                          <td style="width: 40%;">✔️</td> 
+                                      </tr>
+                                  {% endfor %}
+
+                                  {% for equipo in equipos_faltantes %}
+                                      <tr>
+                                          <td style="width: 60%;"> {{ equipo }} </td>
+                                          <td style="width: 40%;">❌</td>
                                       </tr>
                                   {% endfor %}
                               </tbody>
                           </table>
                       </div>
                       </div>   
-                  </div>
-                  
-                  
+                  </div> 
               </div>
             </div>
         </div>
 
     </div>
   </div>
+  </div>  
 
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

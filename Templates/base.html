@@ -15,40 +15,27 @@
    
 </head>
 <body>
-    <header class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-        <div class="container">
-            <a class="navbar-brand" href="#">
-                <img src="{% static 'images/1-logo-ico.png' %}" alt="Logo del hospital" width="30" height="30">
-                Hospital Alma Máter de Antioquia
-            </a>
-        </div>
+    <header class="d-flex flex-wrap justify-content-end py-3 mb-4 border-bottom ">
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <span style="font-weight: bold; ">Hospital Alma Máter de Antioquia </span>
+                <br>
+                <i class="bi bi-arrow-return-left"></i>
+                <a href="{% url 'logout' %}" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cerrar sesión</a>
+            </li> 
+        </ul>
     </header>
-    <!-- Sidebar -->
-    <div class="container-fluid" >
-    <div id="sidebar">
-        
+    
+    
+
+    <div id="sidebar" style="background-color: #003e4b;">
         <hr>
-        <a href="#"><i class="bi bi-clipboard2-pulse"></i> Consulta Externa</a>
-        <a href="{% url 'uce' %}"><i class="bi bi-heart"></i> UCE </a>
-        <a href="#"><i class="bi bi-exclamation-triangle"></i> Urgencias</a>
-        
-      
-        <a href="{% url 'importar_datos' %}"><i class="bi bi-capsule"></i> Actualizar datos</a>
+        <a href="{% url 'importar_datos' %}"><i class="bi bi-arrow-down-up"></i> Actualizar datos</a>
         <hr>
-        <p class="text-center">Usuario: Nombre de Usuario</p>
-            <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <i class="bi bi-person"></i> Perfil
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="{% url 'logout' %}">
-                        <i class="bi bi-house-door"></i> Cerrar sesión
-                    </a>
-                </li>
-                <!-- Agrega más elementos de menú con iconos aquí -->
-            </ul>
+        <span style="color: rgba(0, 0, 255, 0.349); font-weight: bold;">Servicios</span>
+        <li class="mb-1">
+            <a href="{% url 'uce' %}" class="ml-auto"><i class="bi bi-heart"></i> UCE </a>
+        </li>
     </div>    
     
     {% block contenido %}
@@ -58,3 +45,5 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+

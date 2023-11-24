@@ -10,6 +10,9 @@ from collections import Counter
 from statistics import mean
 from django.http import JsonResponse
 from django.db.models import Count
+from django.contrib import messages
+from zipfile import BadZipFile
+
 
 def login_view(request):
     if request.method == 'POST':
@@ -42,7 +45,6 @@ def viewUCE(request):
     sugerencias_nombre = list(obtener_sugerencias("UCE",'nombre'))
     sugerencias_bio = list(obtener_sugerencias("UCE",'bio'))
 
-
     conteo_equipos = contar_equipos_por_nombres("UCE")
     
     promedio_cumplimiento = calcular_porcentaje_cumplimiento_total("UCE")
@@ -50,6 +52,10 @@ def viewUCE(request):
     consultorios = Equipos.objects.filter(servicio="UCE").values('ubicacion').distinct()
     # Filtra en el lado de Python para contar solo las ubicaciones numéricas
     total_consultorios = sum(1 for consultorio in consultorios if str(consultorio['ubicacion']).isdigit())
+    cubiculos = [consultorio for consultorio in consultorios if str(consultorio['ubicacion']).isdigit()]
+    num_cubiculos_disponibles = calcular_cubiculos_disponibles("UCE")
+    por_cubiculos_disponibles = (num_cubiculos_disponibles/total_consultorios)*100
+    print(num_cubiculos_disponibles)
 
 
     contexto = {
@@ -59,7 +65,10 @@ def viewUCE(request):
         "sugerencias_ubicacion": sugerencias_ubicacion,
         "sugerencias_nombre": sugerencias_nombre,
         "sugerencias_bio": sugerencias_bio,
-        "total_consultorios": total_consultorios
+        "total_consultorios": total_consultorios,
+        "cubiculos": cubiculos,
+        "cubiculos_disponibles":num_cubiculos_disponibles,
+        "por_cubiculos_disponibles":por_cubiculos_disponibles
         # Otros datos del contexto que desees pasar a la plantilla
     }
     if request.method == 'POST':
@@ -70,9 +79,6 @@ def viewUCE(request):
             ubicacion = request.POST.get('ubicacion')
             bio = request.POST.get('bio')
             nombre = request.POST.get('nombre')
-        
-            print(ubicacion)
-            print(bio)
 
             equipos_filtrados = buscar_equipos(servicio, ubicacion, bio,nombre)
 
@@ -87,11 +93,17 @@ def viewUCE(request):
                 "sugerencias_ubicacion": sugerencias_ubicacion,
                 "sugerencias_nombre": sugerencias_nombre,
                 "sugerencias_bio": sugerencias_bio,
-                "total_consultorios": total_consultorios
+                "total_consultorios": total_consultorios,
+                "cubiculos": cubiculos,
+                "cubiculos_disponibles":num_cubiculos_disponibles,
+                "por_cubiculos_disponibles":por_cubiculos_disponibles
             })
         if action == "verConsultorio":
             ubicacionconsultorio = request.POST.get('ubicacionconsultorio')
             equiposconsultorio = Equipos.objects.filter(servicio="UCE",ubicacion=ubicacionconsultorio).values("nombre").distinct()
+             
+            equipos_faltantes = [equipo for equipo in ['MONITOR DE SIGNOS VITALES', 'BOMBA DE INFUSION', 'REGULADOR DE VACIO', 'FLUJOMETRO DE OXIGENO'] if equipo not in [item['nombre'] for item in equiposconsultorio]]
+            
             return render(request, 'appseguimiento/UCE.html', {
                 "promedio_cumplimiento":promedio_cumplimiento,
                 "equipos": Equipo,
@@ -100,17 +112,38 @@ def viewUCE(request):
                 "sugerencias_nombre": sugerencias_nombre,
                 "sugerencias_bio": sugerencias_bio,
                 "total_consultorios": total_consultorios,
-                "equiposconsultorio":equiposconsultorio
+                "equiposconsultorio":equiposconsultorio,
+                "cubiculos": cubiculos,
+                "cubiculos_disponibles":num_cubiculos_disponibles,
+                "por_cubiculos_disponibles":por_cubiculos_disponibles,
+                "equipos_faltantes":equipos_faltantes
+            })
+        if action == "verPocentajeConsultorio":
+            ubicacionconsultorio = request.POST.get('ubicacionconsultorio')
+            equiposconsultorio = Equipos.objects.filter(servicio="UCE",ubicacion=ubicacionconsultorio).values("nombre").distinct()
+            equipos_faltantes = [equipo for equipo in ['MONITOR DE SIGNOS VITALES', 'BOMBA DE INFUSION', 'REGULADOR DE VACIO', 'FLUJOMETRO DE OXIGENO'] if equipo not in [item['nombre'] for item in equiposconsultorio]]
+            porcentaje_cubiculo = ((4-len(equipos_faltantes))/4)*100
+            print(porcentaje_cubiculo)
+
+            return render(request, 'appseguimiento/UCE.html', {
+                "promedio_cumplimiento":promedio_cumplimiento,
+                "equipos": Equipo,
+                "conteo_equipos":conteo_equipos,
+                "sugerencias_ubicacion": sugerencias_ubicacion,
+                "sugerencias_nombre": sugerencias_nombre,
+                "sugerencias_bio": sugerencias_bio,
+                "total_consultorios": total_consultorios,
+                "cubiculos": cubiculos,
+                "cubiculos_disponibles":num_cubiculos_disponibles,
+                "por_cubiculos_disponibles":por_cubiculos_disponibles,
+                "porcentaje_cubiculo":porcentaje_cubiculo
+                
             })
            
-    
     return render(request, 'appseguimiento/UCE.html', contexto)
 
-
 def obtener_sugerencias(servicio,filtro):
-    # Aquí deberías consultar tu base de datos para obtener las sugerencias según el filtro
-    # Supongamos que tienes un modelo llamado Sugerencias con un campo 'valor' que contiene las sugerencias
-
+    
     # values y annotate para obtener valores únicos y contar la cantidad de ocurrencias de cada uno en la columna correspondiente. Luego, extraemos los valores únicos con values_list.
     if filtro == 'ubicacion':
         sugerencias = Equipos.objects.filter(servicio=servicio).values('ubicacion').annotate(count=Count('ubicacion')).values_list('ubicacion', flat=True)
@@ -146,7 +179,6 @@ def contar_equipos_por_nombres(servicio):
     # Devuelve el resultado como un diccionario
     return diccionario_sugerencias
 
-
 def calcular_porcentaje_cumplimiento_total(servicio):
     if not servicio:
         # Handle the case where the data set is empty
@@ -157,10 +189,10 @@ def calcular_porcentaje_cumplimiento_total(servicio):
 
     for equipo in equipos:
         criterios = [
-            equipo.etiqueta_caja,
+            #equipo.etiqueta_caja,
             equipo.factura_contrato,
             equipo.resolucion_invima,
-            equipo.carta_garantia,
+            #equipo.carta_garantia,
             equipo.acta_entrega,
             equipo.declaracion_importacion,
             equipo.cronograma_mantenimiento,
@@ -200,10 +232,10 @@ def calcular_porcentaje_cumplimiento_total(servicio):
 
 def calcular_porcentaje_cumplimiento(equipo):
     criterios = {
-        'etiqueta_caja': equipo[5],
+        #'etiqueta_caja': equipo[5],
         'factura_contrato': equipo[6],
         'resolucion_invima': equipo[7],
-        'carta_garantia': equipo[8],
+        #'carta_garantia': equipo[8],
         'acta_entrega': equipo[9],
         'declaracion_importacion': equipo[10],
         'cronograma_mantenimiento': equipo[11],
@@ -231,17 +263,47 @@ def calcular_porcentaje_cumplimiento(equipo):
     porcentaje_cumplimiento = round((total_cumple_no_aplica / total_criterios) * 100, 2)
     return porcentaje_cumplimiento
 
+def calcular_cubiculos_disponibles(servicio):
+    nombres_equipos = [
+        'MONITOR DE SIGNOS VITALES',
+        'BOMBA DE INFUSION',
+        'REGULADOR DE VACIO',
+        'FLUJOMETRO DE OXIGENO',
+    ]
+
+    # Obtener sugerencias de equipos para el servicio dado y los nombres específicos
+    sugerencias = Equipos.objects.filter(servicio=servicio, nombre__in=nombres_equipos).values('nombre').annotate(count=Count('nombre'))
+
+    # Crear un diccionario a partir de los resultados
+    diccionario_sugerencias = {item['nombre']: item['count'] for item in sugerencias}
+
+    # Encontrar la menor cantidad de equipos
+    menor_cantidad = min(diccionario_sugerencias.values(), default=0)
+
+    # El número de cubiculos disponibles es igual a la menor cantidad de equipos
+    cubiculos_disponibles = menor_cantidad
+
+    return cubiculos_disponibles
+
 @login_required
 def importar_datos(request):
     if request.method == 'POST':
         form = ImportarDatosForm(request.POST, request.FILES)
         if form.is_valid():
             archivo_excel = form.cleaned_data['archivo_excel']
-            procesar_archivo_excel(archivo_excel)
-            print("datos importados")
+        
+        
+            try:
+                procesar_archivo_excel(archivo_excel)
+                print("datos importados")
+                messages.success(request, '¡Datos actualizados con éxito!')
+            except BadZipFile:
+                # Handle the BadZipFile exception
+                messages.warning(request, 'Error: El archivo no es un archivo Excel válido.')
             return redirect('importar_datos') 
         else:
-            print("no valido")# Redirige a la página de importación de datos
+            messages.error(request, '¡Datos no actualizados!')
+            return redirect('importar_datos') 
     else:
         form = ImportarDatosForm()
     return render(request, 'appseguimiento/index.html', {'form': form})
